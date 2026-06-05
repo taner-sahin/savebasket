@@ -13,14 +13,59 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
+
         <a class="navbar-brand fw-bold" href="{% url 'products:home' %}">
             KUTAY
         </a>
 
-        <div class="ms-auto">
-            <a href="#" class="btn btn-outline-light btn-sm">Login</a>
-            <a href="#" class="btn btn-light btn-sm">Register</a>
-        </div>
+        <!-- Kategoriler -->
+
+        <ul class="navbar-nav me-auto">
+
+            {% for category in nav_categories %}
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'products:category_detail' category.slug %}">
+                        {{ category.name }}
+                    </a>
+                </li>
+
+            {% endfor %}
+
+        </ul>
+
+        <!-- Auth Butonları -->
+
+       <!-- Auth Butonları -->
+<div class="d-flex gap-2 align-items-center">
+
+    {% if user.is_authenticated %}
+
+        <span class="text-white small">
+            Hoş geldin, {{ user.username }}
+        </span>
+
+        <form method="POST" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light btn-sm">
+                Çıkış Yap
+            </button>
+        </form>
+
+    {% else %}
+
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline-light btn-sm">
+            Giriş Yap
+        </a>
+
+        <a href="{% url 'accounts:register' %}" class="btn btn-light btn-sm">
+            Üye Ol
+        </a>
+
+    {% endif %}
+
+</div>
+
     </div>
 </nav>
 

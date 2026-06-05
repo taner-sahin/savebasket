@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1 class="mb-4">{{ category.name }}</h1>
+
+<div class="row">
+    {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+
+                <a href="{% url 'products:product_detail' product.slug %}">
+                    <img
+                        src="{% static product.image %}"
+                        class="card-img-top"
+                        alt="{{ product.name }}"
+                    >
+                </a>
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a
+                            href="{% url 'products:product_detail' product.slug %}"
+                            class="text-decoration-none text-dark"
+                        >
+                            {{ product.name }}
+                        </a>
+                    </h5>
+
+                    <p class="card-text">{{ product.price }} TL</p>
+                </div>
+
+            </div>
+        </div>
+    {% empty %}
+        <p>Bu kategoride ürün yok.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}

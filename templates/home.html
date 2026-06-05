@@ -1,11 +1,106 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<section class="text-center py-5">
+<section class="py-5 text-center">
     <h1 class="fw-bold">KUTAY</h1>
     <p class="lead">Build Your Future</p>
-    <p>Premium sneaker e-commerce project.</p>
+    <p>Premium Sneaker Store</p>
+</section>
+
+<section class="mb-5">
+    <h2 class="mb-4">Yeni Gelenler</h2>
+
+    <div class="row">
+        {% for product in new_products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+
+                    <a href="{% url 'products:product_detail' product.slug %}">
+                        <img
+                            src="{% static product.image %}"
+                            class="card-img-top"
+                            alt="{{ product.name }}"
+                        >
+                    </a>
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a
+                                href="{% url 'products:product_detail' product.slug %}"
+                                class="text-decoration-none text-dark"
+                            >
+                                {{ product.name }}
+                            </a>
+                        </h5>
+
+                        <p class="card-text">{{ product.price }} TL</p>
+                    </div>
+
+                </div>
+            </div>
+        {% empty %}
+            <p>Henüz yeni ürün yok.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5">
+    <h2 class="mb-4">Öne Çıkan Ürünler</h2>
+
+    <div class="row">
+        {% for product in featured_products %}
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+
+                    <a href="{% url 'products:product_detail' product.slug %}">
+                        <img
+                            src="{% static product.image %}"
+                            class="card-img-top"
+                            alt="{{ product.name }}"
+                        >
+                    </a>
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a
+                                href="{% url 'products:product_detail' product.slug %}"
+                                class="text-decoration-none text-dark"
+                            >
+                                {{ product.name }}
+                            </a>
+                        </h5>
+
+                        <p class="card-text">{{ product.price }} TL</p>
+                    </div>
+
+                </div>
+            </div>
+        {% empty %}
+            <p>Henüz öne çıkan ürün yok.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="mb-5">
+    <h2 class="mb-4">Koleksiyonlar</h2>
+
+    <div class="row">
+        {% for category in categories %}
+            <div class="col-md-4 mb-3">
+                <a
+                    href="{% url 'products:category_detail' category.slug %}"
+                    class="text-decoration-none text-dark"
+                >
+                    <div class="border p-4 text-center h-100">
+                        <h5>{{ category.name }}</h5>
+                        <p class="mb-0">Koleksiyonu Gör</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
 </section>
 
 {% endblock %}
