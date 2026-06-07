@@ -1,31 +1,47 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <div class="row">
-    <div class="col-md-6">
-        <img src="{% static product.image %}" class="img-fluid" alt="{{ product.name }}">
+  <div class="col-md-6">
+    <img
+      src="{% static product.image %}"
+      class="img-fluid"
+      alt="{{ product.name }}"
+    />
+  </div>
+
+  <div class="col-md-6">
+    <h1>{{ product.name }}</h1>
+
+    <p class="lead">{{ product.price }} TL</p>
+
+    <p>{{ product.description }}</p>
+
+    <hr />
+
+    <h5>Varyantlar</h5>
+
+    {% for variant in variants %}
+    <div class="border p-2 mb-2">
+      Numara: {{ variant.size }} | Renk: {{ variant.color }} | Stok: {{
+      variant.stock }}
     </div>
+    {% empty %}
+    <p>Bu ürün için varyant bulunamadı.</p>
+    {% endfor %}
 
-    <div class="col-md-6">
-        <h1>{{ product.name }}</h1>
-        <p class="lead">{{ product.price }} TL</p>
+    <hr />
 
-        <p>{{ product.description }}</p>
+    <div class="d-flex gap-2">
+      <a href="#" class="btn btn-dark"> Sepete Ekle </a>
 
-        <h5>Varyantlar</h5>
-
-        {% for variant in variants %}
-            <div class="border p-2 mb-2">
-                Numara: {{ variant.size }} |
-                Renk: {{ variant.color }} |
-                Stok: {{ variant.stock }}
-            </div>
-        {% empty %}
-            <p>Bu ürün için varyant bulunamadı.</p>
-        {% endfor %}
+      <a
+        href="{% url 'wishlist:add_to_wishlist' product.slug %}"
+        class="btn btn-outline-dark"
+      >
+        Favorilere Ekle
+      </a>
     </div>
+  </div>
 </div>
 
 {% endblock %}

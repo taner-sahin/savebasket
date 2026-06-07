@@ -19,6 +19,7 @@
                 </a>
 
                 <div class="card-body">
+
                     <h5 class="card-title">
                         <a
                             href="{% url 'products:product_detail' product.slug %}"
@@ -28,7 +29,17 @@
                         </a>
                     </h5>
 
-                    <p class="card-text">{{ product.price }} TL</p>
+                    <p class="card-text">
+                        {{ product.price }} TL
+                    </p>
+
+                    <a
+                        href="{% url 'products:product_detail' product.slug %}"
+                        class="btn btn-dark"
+                    >
+                        Detaya Git
+                    </a>
+
                 </div>
 
             </div>

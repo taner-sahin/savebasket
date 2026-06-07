@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    {% if query %}
+        <h2 class="mb-4">Arama Sonuçları: "{{ query }}"</h2>
+    {% else %}
+        <h2 class="mb-4">Tüm Ürünler</h2>
+    {% endif %}
+
+    <form method="GET" action="{% url 'products:search' %}" class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Ürün ara..."
+                value="{{ query|default:'' }}"
+            >
+        </div>
+
+        <div class="col-md-2">
+            <input
+                type="number"
+                name="min_price"
+                class="form-control"
+                placeholder="Min fiyat"
+                value="{{ min_price|default:'' }}"
+            >
+        </div>
+
+        <div class="col-md-2">
+            <input
+                type="number"
+                name="max_price"
+                class="form-control"
+                placeholder="Max fiyat"
+                value="{{ max_price|default:'' }}"
+            >
+        </div>
+
+        <div class="col-md-2">
+            <select name="ordering" class="form-select">
+                <option value="">Sıralama</option>
+
+                <option value="price_low" {% if ordering == "price_low" %}selected{% endif %}>
+                    Fiyat: Düşükten Yükseğe
+                </option>
+
+                <option value="price_high" {% if ordering == "price_high" %}selected{% endif %}>
+                    Fiyat: Yüksekten Düşüğe
+                </option>
+            </select>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-center">
+            <div class="form-check">
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="in_stock"
+                    value="1"
+                    {% if in_stock %}checked{% endif %}
+                >
+                <label class="form-check-label">
+                    Stokta olanlar
+                </label>
+            </div>
+        </div>
+
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-dark w-100">
+                Filtrele
+            </button>
+        </div>
+
+    </form>
+
+    <div class="row">
+        {% for product in products %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+
+                    <a href="{% url 'products:product_detail' product.slug %}">
+                        <img
+                            src="{% static product.image %}"
+                            class="card-img-top"
+                            alt="{{ product.name }}"
+                        >
+                    </a>
+
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a
+                                href="{% url 'products:product_detail' product.slug %}"
+                                class="text-decoration-none text-dark"
+                            >
+                                {{ product.name }}
+                            </a>
+                        </h5>
+
+                        <p class="card-text">
+                            {{ product.price }} TL
+                        </p>
+
+                        <a
+                            href="{% url 'products:product_detail' product.slug %}"
+                            class="btn btn-dark"
+                        >
+                            Detaya Git
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <p>Aradığınız ürüne uygun sonuç bulunamadı.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+</section>
+
+{% endblock %}

@@ -16,7 +16,6 @@
         {% for product in new_products %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-
                     <a href="{% url 'products:product_detail' product.slug %}">
                         <img
                             src="{% static product.image %}"
@@ -35,9 +34,17 @@
                             </a>
                         </h5>
 
-                        <p class="card-text">{{ product.price }} TL</p>
-                    </div>
+                        <p class="card-text">
+                            {{ product.price }} TL
+                        </p>
 
+                        <a
+                            href="{% url 'products:product_detail' product.slug %}"
+                            class="btn btn-dark"
+                        >
+                            Detaya Git
+                        </a>
+                    </div>
                 </div>
             </div>
         {% empty %}
@@ -53,7 +60,6 @@
         {% for product in featured_products %}
             <div class="col-md-3 mb-4">
                 <div class="card h-100">
-
                     <a href="{% url 'products:product_detail' product.slug %}">
                         <img
                             src="{% static product.image %}"
@@ -72,9 +78,17 @@
                             </a>
                         </h5>
 
-                        <p class="card-text">{{ product.price }} TL</p>
-                    </div>
+                        <p class="card-text">
+                            {{ product.price }} TL
+                        </p>
 
+                        <a
+                            href="{% url 'products:product_detail' product.slug %}"
+                            class="btn btn-dark"
+                        >
+                            Detaya Git
+                        </a>
+                    </div>
                 </div>
             </div>
         {% empty %}

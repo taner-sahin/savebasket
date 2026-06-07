@@ -60,3 +60,40 @@ def product_detail(request, product_slug):
     }
 
     return render(request, 'products/detail.html', context)
+def search(request):
+    query = request.GET.get("q")
+    min_price = request.GET.get("min_price")
+    max_price = request.GET.get("max_price")
+    in_stock = request.GET.get("in_stock")
+    ordering = request.GET.get("ordering")
+
+    products = Product.objects.all()
+
+    if query:
+        products = products.filter(name__icontains=query)
+
+    if min_price:
+        products = products.filter(price__gte=min_price)
+
+    if max_price:
+        products = products.filter(price__lte=max_price)
+
+    if in_stock:
+        products = products.filter(variants__stock__gt=0).distinct()
+
+    if ordering == "price_low":
+        products = products.order_by("price")
+
+    elif ordering == "price_high":
+        products = products.order_by("-price")
+
+    context = {
+        "products": products,
+        "query": query,
+        "min_price": min_price,
+        "max_price": max_price,
+        "in_stock": in_stock,
+        "ordering": ordering,
+    }
+
+    return render(request, "products/shop.html", context)
