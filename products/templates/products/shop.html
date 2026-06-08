@@ -4,15 +4,12 @@
 {% block content %}
 
 <section class="container py-5">
-
     {% if query %}
         <h2 class="mb-4">Arama Sonuçları: "{{ query }}"</h2>
     {% else %}
         <h2 class="mb-4">Tüm Ürünler</h2>
     {% endif %}
-
     <form method="GET" action="{% url 'products:search' %}" class="row g-3 mb-4">
-
         <div class="col-md-3">
             <input
                 type="text"
@@ -46,11 +43,9 @@
         <div class="col-md-2">
             <select name="ordering" class="form-select">
                 <option value="">Sıralama</option>
-
                 <option value="price_low" {% if ordering == "price_low" %}selected{% endif %}>
                     Fiyat: Düşükten Yükseğe
                 </option>
-
                 <option value="price_high" {% if ordering == "price_high" %}selected{% endif %}>
                     Fiyat: Yüksekten Düşüğe
                 </option>
@@ -84,7 +79,6 @@
         {% for product in products %}
             <div class="col-md-4 mb-4">
                 <div class="card h-100">
-
                     <a href="{% url 'products:product_detail' product.slug %}">
                         <img
                             src="{% static product.image %}"
@@ -92,7 +86,6 @@
                             alt="{{ product.name }}"
                         >
                     </a>
-
                     <div class="card-body">
                         <h5 class="card-title">
                             <a
@@ -106,7 +99,6 @@
                         <p class="card-text">
                             {{ product.price }} TL
                         </p>
-
                         <a
                             href="{% url 'products:product_detail' product.slug %}"
                             class="btn btn-dark"
@@ -114,7 +106,6 @@
                             Detaya Git
                         </a>
                     </div>
-
                 </div>
             </div>
         {% empty %}
@@ -123,7 +114,5 @@
             </div>
         {% endfor %}
     </div>
-
 </section>
-
 {% endblock %}

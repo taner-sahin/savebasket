@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<h1 class="mb-4">Sepetim</h1>
+
+<div class="row">
+  {% for item in cart_items %}
+  <div class="col-12 mb-3">
+    <div class="card">
+      <div class="row g-0">
+        <div class="col-md-3">
+          <img
+            src="{% static item.product.image %}"
+            class="img-fluid"
+            alt="{{ item.product.name }}"
+          />
+        </div>
+
+        <div class="col-md-9">
+          <div class="card-body">
+            <h5>{{ item.product.name }}</h5>
+
+            <p>Fiyat: {{ item.product.price }} TL</p>
+
+            <p>Numara: {{ item.variant.size }}</p>
+
+            <p>Renk: {{ item.variant.color }}</p>
+
+            <p>
+              Adet:
+              <a
+                href="{% url 'cart:decrease_quantity' item.id %}"
+                class="btn btn-sm btn-outline-dark"
+              >
+                -
+              </a>
+
+              <span class="mx-2"> {{ item.quantity }} </span>
+
+              <a
+                href="{% url 'cart:increase_quantity' item.id %}"
+                class="btn btn-sm btn-outline-dark"
+              >
+                +
+              </a>
+            </p>
+
+            <p>Ara Toplam: {{ item.subtotal }} TL</p>
+            <p>Stok: {{ item.variant.stock }}</p>
+            <a
+              href="{% url 'cart:remove_from_cart' item.id %}"
+              class="btn btn-outline-danger"
+            >
+              Sepetten Sil
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% empty %}
+  <p>Sepetiniz boş.</p>
+  {% endfor %}
+</div>
+
+{% if cart_items %}
+<div class="text-end mt-4">
+  <h4>Genel Toplam: {{ total }} TL</h4>
+</div>
+{% endif %} {% endblock %}

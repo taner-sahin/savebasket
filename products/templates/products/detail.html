@@ -1,47 +1,65 @@
-{% extends 'base.html' %} {% load static %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
 
 <div class="row">
-  <div class="col-md-6">
-    <img
-      src="{% static product.image %}"
-      class="img-fluid"
-      alt="{{ product.name }}"
-    />
-  </div>
 
-  <div class="col-md-6">
-    <h1>{{ product.name }}</h1>
-
-    <p class="lead">{{ product.price }} TL</p>
-
-    <p>{{ product.description }}</p>
-
-    <hr />
-
-    <h5>Varyantlar</h5>
-
-    {% for variant in variants %}
-    <div class="border p-2 mb-2">
-      Numara: {{ variant.size }} | Renk: {{ variant.color }} | Stok: {{
-      variant.stock }}
+    <div class="col-md-6">
+        <img
+            src="{% static product.image %}"
+            class="img-fluid"
+            alt="{{ product.name }}"
+        >
     </div>
-    {% empty %}
-    <p>Bu ürün için varyant bulunamadı.</p>
-    {% endfor %}
 
-    <hr />
+    <div class="col-md-6">
+        <h1>{{ product.name }}</h1>
 
-    <div class="d-flex gap-2">
-      <a href="#" class="btn btn-dark"> Sepete Ekle </a>
+        <p class="lead">
+            {{ product.price }} TL
+        </p>
 
-      <a
-        href="{% url 'wishlist:add_to_wishlist' product.slug %}"
-        class="btn btn-outline-dark"
-      >
-        Favorilere Ekle
-      </a>
+        <p>
+            {{ product.description }}
+        </p>
+
+        <hr>
+
+        <form method="POST" action="{% url 'cart:add_to_cart' product.slug %}">
+            {% csrf_token %}
+
+            <h5>Varyantlar</h5>
+
+            {% for variant in variants %}
+                <div class="form-check border p-2 mb-2">
+                    <input
+                        class="form-check-input"
+                        type="radio"
+                        name="variant_id"
+                        value="{{ variant.id }}"
+                        id="variant{{ variant.id }}"
+                        required
+                    >
+
+                    <label class="form-check-label" for="variant{{ variant.id }}">
+                        Numara: {{ variant.size }} |
+                        Renk: {{ variant.color }} |
+                        Stok: {{ variant.stock }}
+                    </label>
+                </div>
+            {% empty %}
+                <p>Bu ürün için varyant bulunamadı.</p>
+            {% endfor %}
+
+            <hr>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-dark">Sepete Ekle</button>
+                <a href="{% url 'wishlist:add_to_wishlist' product.slug %}" class="btn btn-outline-dark">
+                    Favorilere Ekle
+                </a>
+            </div>
+        </form>
     </div>
-  </div>
 </div>
-
 {% endblock %}
