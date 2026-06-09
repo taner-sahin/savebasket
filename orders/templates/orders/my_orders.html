@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Siparişlerim
+</h1>
+
+{% for order in orders %}
+
+<div class="card mb-3">
+    <div class="card-body">
+
+        <h5>
+            Sipariş #{{ order.id }}
+        </h5>
+
+        <p>
+            Tarih:
+            {{ order.created_at }}
+        </p>
+
+        <p>
+            Durum:
+            {{ order.get_status_display }}
+        </p>
+
+        <p>
+            Toplam:
+            {{ order.total_price }} TL
+        </p>
+
+        <a
+            href="{% url 'orders:order_detail' order.id %}"
+            class="btn btn-dark"
+        >
+            Detay Gör
+        </a>
+
+    </div>
+</div>
+
+{% empty %}
+
+<div class="alert alert-info">
+    Henüz siparişiniz bulunmuyor.
+</div>
+
+{% endfor %}
+
+{% endblock %}

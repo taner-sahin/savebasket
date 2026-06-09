@@ -67,4 +67,11 @@
 <div class="text-end mt-4">
   <h4>Genel Toplam: {{ total }} TL</h4>
 </div>
+
+<a
+    href="{% url 'orders:checkout' %}"
+    class="btn btn-dark mt-3"
+>
+    Siparişi Tamamla
+</a>
 {% endif %} {% endblock %}

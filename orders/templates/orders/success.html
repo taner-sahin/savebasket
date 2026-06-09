@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center mt-5">
+
+    <h1>
+        Siparişiniz Başarıyla Oluşturuldu
+    </h1>
+
+    <p> Siparişiniz alınmıştır.</p>
+
+    <a href="{% url 'products:home' %}" class="btn btn-dark" > Alışverişe Devam Et</a>
+
+</div>
+
+{% endblock %}

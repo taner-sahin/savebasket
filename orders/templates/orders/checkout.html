@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Siparişi Tamamla
+</h1>
+
+<div class="row">
+
+    <div class="col-md-7">
+        <div class="card p-4">
+
+            <h4 class="mb-3">
+                Teslimat Bilgileri
+            </h4>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-dark">
+                    Siparişi Oluştur
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card p-4">
+
+            <h4 class="mb-3"> Sepet Özeti</h4>
+
+            {% for item in cart_items %}
+                <p>
+                    <strong>{{ item.product.name }}</strong><br>
+                    Numara: {{ item.variant.size }} |
+                    Renk: {{ item.variant.color }} <br>
+                    Adet: {{ item.quantity }} <br>
+                    Ara Toplam: {{ item.subtotal }} TL
+                </p>
+
+                <hr>
+            {% endfor %}
+
+            <h4> Genel Toplam:{{ total }} TL </h4>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
