@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Yorumu Sil
+</h1>
+
+<div class="card p-4">
+
+    <p>
+        Bu yorumu silmek istediğinize emin misiniz?
+    </p>
+
+    <blockquote class="border-start ps-3">
+        {{ review.comment }}
+    </blockquote>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <button
+            type="submit"
+            class="btn btn-danger"
+        >
+            Evet, Sil
+        </button>
+
+        <a
+            href="{% url 'products:product_detail' review.product.slug %}"
+            class="btn btn-outline-dark"
+        >
+            Vazgeç
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

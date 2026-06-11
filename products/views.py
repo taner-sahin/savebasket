@@ -1,6 +1,9 @@
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404 , redirect
 from .models import Product, Category
+from reviews.forms import ReviewForm
+from reviews.models import Review
+from django.contrib import messages
 
 
 def home(request):
@@ -54,12 +57,75 @@ def product_detail(request, product_slug):
 
     variants = product.variants.all()
 
+    reviews = Review.objects.filter(
+        product=product
+    ).order_by(
+        "-created_at"
+    )
+
+    user_review = None
+
+    if request.user.is_authenticated:
+        user_review = Review.objects.filter(
+            product=product,
+            user=request.user
+        ).first()
+
+    if request.method == "POST":
+
+        if user_review:
+            messages.warning(
+                request,
+                "Bu ürün için zaten yorum yaptınız."
+            )
+
+            return redirect(
+                "products:product_detail",
+                product_slug=product.slug
+            )
+
+        review_form = ReviewForm(
+            request.POST
+        )
+
+        if review_form.is_valid():
+
+            review = review_form.save(
+                commit=False
+            )
+
+            review.user = request.user
+            review.product = product
+            review.save()
+
+            messages.success(
+                request,
+                "Yorumunuz başarıyla eklendi."
+            )
+
+            return redirect(
+                "products:product_detail",
+                product_slug=product.slug
+            )
+
+    else:
+
+        review_form = ReviewForm()
+
     context = {
-        'product': product,
-        'variants': variants,
+        "product": product,
+        "variants": variants,
+        "reviews": reviews,
+        "review_form": review_form,
+        "user_review": user_review,
     }
 
-    return render(request, 'products/detail.html', context)
+    return render(
+        request,
+        "products/detail.html",
+        context
+    )
+
 def search(request):
     query = request.GET.get("q")
     min_price = request.GET.get("min_price")

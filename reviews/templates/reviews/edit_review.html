@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="mb-4">
+    Yorumu Düzenle
+</h1>
+
+<div class="card p-4">
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn btn-dark">
+            Güncelle
+        </button>
+
+        <a
+            href="{% url 'products:product_detail' review.product.slug %}"
+            class="btn btn-outline-dark"
+        >
+            Vazgeç
+        </a>
+    </form>
+
+</div>
+
+{% endblock %}

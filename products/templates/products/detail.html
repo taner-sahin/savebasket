@@ -1,65 +1,132 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block content %}
 
 <div class="row">
+  <div class="col-md-6">
+    <img
+      src="{% static product.image %}"
+      class="img-fluid"
+      alt="{{ product.name }}"
+    />
+  </div>
 
-    <div class="col-md-6">
-        <img
-            src="{% static product.image %}"
-            class="img-fluid"
-            alt="{{ product.name }}"
+  <div class="col-md-6">
+    <h1>{{ product.name }}</h1>
+
+    <p class="lead">{{ product.price }} TL</p>
+
+    <p>{{ product.description }}</p>
+
+    <hr />
+
+    <form method="POST" action="{% url 'cart:add_to_cart' product.slug %}">
+      {% csrf_token %}
+
+      <h5>Varyantlar</h5>
+
+      {% for variant in variants %}
+      <div class="form-check border p-2 mb-2">
+        <input
+          class="form-check-input"
+          type="radio"
+          name="variant_id"
+          value="{{ variant.id }}"
+          id="variant{{ variant.id }}"
+          required
+        />
+
+        <label class="form-check-label" for="variant{{ variant.id }}">
+          Numara: {{ variant.size }} | Renk: {{ variant.color }} | Stok: {{
+          variant.stock }}
+        </label>
+      </div>
+      {% empty %}
+      <p>Bu ürün için varyant bulunamadı.</p>
+      {% endfor %}
+
+      <hr />
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-dark">Sepete Ekle</button>
+
+        <a
+          href="{% url 'wishlist:add_to_wishlist' product.slug %}"
+          class="btn btn-outline-dark"
         >
-    </div>
-
-    <div class="col-md-6">
-        <h1>{{ product.name }}</h1>
-
-        <p class="lead">
-            {{ product.price }} TL
-        </p>
-
-        <p>
-            {{ product.description }}
-        </p>
-
-        <hr>
-
-        <form method="POST" action="{% url 'cart:add_to_cart' product.slug %}">
-            {% csrf_token %}
-
-            <h5>Varyantlar</h5>
-
-            {% for variant in variants %}
-                <div class="form-check border p-2 mb-2">
-                    <input
-                        class="form-check-input"
-                        type="radio"
-                        name="variant_id"
-                        value="{{ variant.id }}"
-                        id="variant{{ variant.id }}"
-                        required
-                    >
-
-                    <label class="form-check-label" for="variant{{ variant.id }}">
-                        Numara: {{ variant.size }} |
-                        Renk: {{ variant.color }} |
-                        Stok: {{ variant.stock }}
-                    </label>
-                </div>
-            {% empty %}
-                <p>Bu ürün için varyant bulunamadı.</p>
-            {% endfor %}
-
-            <hr>
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-dark">Sepete Ekle</button>
-                <a href="{% url 'wishlist:add_to_wishlist' product.slug %}" class="btn btn-outline-dark">
-                    Favorilere Ekle
-                </a>
-            </div>
-        </form>
-    </div>
+          Favorilere Ekle
+        </a>
+      </div>
+    </form>
+  </div>
 </div>
+
+<hr class="my-5" />
+
+<div class="row">
+  <div class="col-md-6">
+    <h3 class="mb-3">Yorum Yaz</h3>
+
+    {% if user.is_authenticated %} {% if user_review %}
+
+    <div class="alert alert-success">Bu ürün için yorumunuz kaydedildi.</div>
+
+    {% else %}
+
+    <form method="POST">
+      {% csrf_token %} {{ review_form.as_p }}
+
+      <button type="submit" class="btn btn-dark">Yorumu Gönder</button>
+    </form>
+
+    {% endif %} {% else %}
+
+    <div class="alert alert-info">Yorum yazmak için giriş yapmalısınız.</div>
+
+    {% endif %}
+  </div>
+
+  <div class="col-md-6">
+    <h3 class="mb-3">Yorumlar</h3>
+
+    {% for review in reviews %}
+
+    <div class="card mb-3">
+      <div class="card-body">
+        <h6>{{ review.user.username }}</h6>
+
+        <p>Puan: {{ review.rating }} / 5</p>
+
+        <p>{{ review.comment }}</p>
+
+        {% if review.user == request.user %}
+
+        <div class="mt-2">
+          <a
+            href="{% url 'reviews:edit_review' review.id %}"
+            class="btn btn-sm btn-outline-dark"
+          >
+            Düzenle
+          </a>
+
+          <a
+            href="{% url 'reviews:delete_review' review.id %}"
+            class="btn btn-sm btn-outline-danger"
+          >
+            Sil
+          </a>
+        </div>
+
+        {% endif %}
+
+        <small class="text-muted"> {{ review.created_at }} </small>
+      </div>
+    </div>
+
+    {% empty %}
+
+    <p>Bu ürün için henüz yorum yok.</p>
+
+    {% endfor %}
+  </div>
+</div>
+
 {% endblock %}
